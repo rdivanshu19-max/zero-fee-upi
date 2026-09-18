@@ -253,9 +253,9 @@ function Field({
   children,
 }: {
   label: string;
-  hint?: string;
-  error?: string;
-  chip?: string;
+  hint?: string | undefined;
+  error?: string | undefined;
+  chip?: string | undefined;
   children: (id: string, invalid: boolean) => React.ReactNode;
 }) {
   const id = useId();
