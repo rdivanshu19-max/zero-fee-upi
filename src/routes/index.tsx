@@ -93,7 +93,7 @@ function Index() {
         </section>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-8">
-          <form onSubmit={onSubmit} noValidate className="no-print surface-card p-6 sm:p-8">
+          <form onSubmit={onSubmit} noValidate className="no-print surface-card self-start p-6 sm:p-8">
             <h2 className="text-lg font-bold">Payment details</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Add your UPI details and the full amount you're owed.
@@ -364,7 +364,7 @@ function QrCard({
           title={`UPI QR ${index} of ${count} for ${formatINR(amount)}`}
         />
       </div>
-      <div className="no-print mt-3 flex gap-2">
+      <div className="no-print mt-3 flex gap-2 whitespace-nowrap">
         <button
           type="button"
           className="btn-ghost"
