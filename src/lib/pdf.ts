@@ -13,6 +13,13 @@ export type InvoiceMeta = {
 
 export type QrItem = { index: number; amount: number; dataUrl: string };
 
+export type PdfLineItem = {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+};
+
 const INDIGO: [number, number, number] = [99, 91, 255];
 const INK: [number, number, number] = [20, 22, 31];
 const MUTED: [number, number, number] = [107, 114, 128];
