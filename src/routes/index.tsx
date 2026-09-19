@@ -23,6 +23,8 @@ import {
 } from "@/lib/upi";
 import { buildInvoicePdf, type InvoiceMeta, type QrItem } from "@/lib/pdf";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { organizeBillDetails, type BillLineItem } from "@/lib/invoice-ai.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 const TITLE = "CLOCK IT — Accept UPI payments with ₹0 fees";
 const DESCRIPTION =
@@ -70,6 +72,19 @@ function Index() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [generated, setGenerated] = useState<Generated | null>(null);
   const [invoice, setInvoice] = useState<InvoiceMeta>(emptyInvoice);
+  const [lineItems, setLineItems] = useState<BillLineItem[]>([]);
+
+  function resetAll() {
+    setUpiId("");
+    setName("");
+    setAmount("");
+    setNote("");
+    setErrors({});
+    setGenerated(null);
+    setInvoice(emptyInvoice);
+    setLineItems([]);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   const liveTotal = /^\d+(\.\d{1,2})?$/.test(amount.trim()) ? Number(amount) : 0;
   const liveParts = useMemo(() => splitAmount(liveTotal), [liveTotal]);
