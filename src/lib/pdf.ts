@@ -41,6 +41,7 @@ export function buildInvoicePdf(opts: {
   payeeName: string;
   note: string;
   items: QrItem[];
+  lineItems?: PdfLineItem[];
 }): jsPDF {
   const { meta, items } = opts;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -99,8 +100,68 @@ export function buildInvoicePdf(opts: {
     y += 5;
   });
 
+  // Itemised table
+  const lineItems = opts.lineItems ?? [];
+  if (lineItems.length) {
+    y += 4;
+    doc.setTextColor(...INK);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.text("Items", M, y);
+    y += 5;
+
+    const colQty = PAGE_W - M - 78;
+    const colRate = PAGE_W - M - 46;
+    const colAmt = PAGE_W - M;
+
+    const tableHead = () => {
+      doc.setFillColor(243, 243, 255);
+      doc.rect(M, y - 4.5, PAGE_W - M * 2, 7, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.5);
+      doc.setTextColor(...MUTED);
+      doc.text("Description", M + 2, y);
+      doc.text("Qty", colQty, y, { align: "right" });
+      doc.text("Rate", colRate, y, { align: "right" });
+      doc.text("Amount", colAmt - 2, y, { align: "right" });
+      y += 7;
+    };
+    tableHead();
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    lineItems.forEach((it) => {
+      if (y > PAGE_H - 32) {
+        doc.addPage();
+        header();
+        tableHead();
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+      }
+      doc.setTextColor(...INK);
+      const desc = doc.splitTextToSize(it.description, colQty - M - 8) as string[];
+      doc.text(desc[0] ?? "", M + 2, y);
+      doc.setTextColor(...MUTED);
+      doc.text(String(it.quantity), colQty, y, { align: "right" });
+      doc.text(rupee(it.unitPrice), colRate, y, { align: "right" });
+      doc.setTextColor(...INK);
+      doc.text(rupee(it.amount), colAmt - 2, y, { align: "right" });
+      y += 5.4;
+      doc.setDrawColor(...LINE);
+      doc.line(M, y - 2, PAGE_W - M, y - 2);
+    });
+
+    const sum = lineItems.reduce((s, it) => s + it.amount, 0);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9.5);
+    doc.setTextColor(...INK);
+    doc.text("Items total", colRate, y + 2, { align: "right" });
+    doc.text(rupee(Math.round(sum * 100) / 100), colAmt - 2, y + 2, { align: "right" });
+    y += 8;
+  }
+
   // Custom bill details
-  if (meta.details.trim()) {
+  if (!lineItems.length && meta.details.trim()) {
     y += 3;
     doc.setDrawColor(...LINE);
     doc.line(M, y, PAGE_W - M, y);
