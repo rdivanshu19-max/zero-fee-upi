@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://clock-it-omega.vercel.app/sitemap.xml
