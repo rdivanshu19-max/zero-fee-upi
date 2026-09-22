@@ -79,6 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "CLOCK IT — Accept UPI payments with ₹0 fees" },
       { name: "author", content: "CLOCK IT" },
+      { name: "google-site-verification", content: "S7yR3PSw-nLZPiflcsQtuGsTm40d2Vr2SFbjMJOC3BY" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
