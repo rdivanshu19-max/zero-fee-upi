@@ -26,6 +26,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { organizeBillDetails, type BillLineItem } from "@/lib/invoice-ai.functions";
 import { useServerFn } from "@tanstack/react-start";
 
+const SITE_URL = "https://clock-it-omega.vercel.app/";
 const TITLE = "CLOCK IT — Accept UPI payments with ₹0 fees";
 const DESCRIPTION =
   "Split any amount into UPI QR codes of ₹1,999 or less so customers can pay the full total. Generated entirely on-device — no fees, no accounts, no servers.";
@@ -35,12 +36,45 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: TITLE },
       { name: "description", content: DESCRIPTION },
+      { property: "og:site_name", content: "CLOCK IT" },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:image", content: `${SITE_URL}og-image.png` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "CLOCK IT — Accept UPI payments with ₹0 fees" },
+      { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: `${SITE_URL}og-image.png` },
+      { name: "theme-color", content: "#635BFF" },
+    ],
+    links: [{ rel: "canonical", href: SITE_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "CLOCK IT",
+          alternateName: "CLOCK IT — Accept UPI payments with ₹0 fees",
+          description: DESCRIPTION,
+          url: SITE_URL,
+          applicationCategory: "FinanceApplication",
+          operatingSystem: "Any",
+          browserRequirements: "Requires JavaScript",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+          audience: { "@type": "Audience", audienceType: "Merchants and shopkeepers in India" },
+          featureList: [
+            "Split any amount into UPI QR codes of ₹1,999 or less",
+            "Generate printable invoice PDFs with all QR codes",
+            "Zero fees, works fully on-device",
+          ],
+        }),
+      },
     ],
   }),
   component: Index,
