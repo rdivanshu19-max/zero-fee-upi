@@ -3,8 +3,16 @@ import splitPaymentTotalTool from "./tools/split-payment-total";
 import createUpiPaymentLinksTool from "./tools/create-upi-payment-links";
 import checkUpiIdTool from "./tools/check-upi-id";
 
+const supabaseUrl = (process.env["SUPABASE_URL"] ?? "").replace(/\/+$/, "");
+
 export default defineMcp({
   name: "zero-fee-upi",
+  title: "Zero Fee UPI",
+  version: "0.1.0",
+  auth: auth.oauth.issuer({
+    issuer: `${supabaseUrl}/auth/v1`,
+    acceptedAudiences: "authenticated",
+  }),
   title: "Zero Fee UPI",
   version: "0.1.0",
   instructions:
