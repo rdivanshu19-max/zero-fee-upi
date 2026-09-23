@@ -1,4 +1,4 @@
-import { defineMcp } from "@lovable.dev/mcp-js";
+import { auth, defineMcp } from "@lovable.dev/mcp-js";
 import splitPaymentTotalTool from "./tools/split-payment-total";
 import createUpiPaymentLinksTool from "./tools/create-upi-payment-links";
 import checkUpiIdTool from "./tools/check-upi-id";
