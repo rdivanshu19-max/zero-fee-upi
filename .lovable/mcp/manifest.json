@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "sdk_version": "3.0.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "zero-fee-upi",
+      "version": "0.1.0",
+      "title": "Zero Fee UPI"
+    },
+    "tools": [
+      {
+        "name": "split_payment_total",
+        "title": "Split a payment total",
+        "description": "Split an Indian Rupee total into UPI amounts of ₹1,999 or less, so capped small or new-payee transfers still cover the full amount.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 199900,
+              "description": "Total amount to collect in INR. Must be more than 0 and at most 199900."
+            }
+          },
+          "required": [
+            "total"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_upi_payment_links",
+        "title": "Create UPI payment links",
+        "description": "Build the full set of upi:// payment links for a total, already split into amounts of ₹1,999 or less. Each link can be turned into a QR code or opened in a UPI app.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "upiId": {
+              "type": "string",
+              "description": "Payee UPI ID, for example shop@okaxis."
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "Account holder or shop name."
+            },
+            "total": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 199900,
+              "description": "Total amount to collect in INR."
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 60
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional payment note added to each link, or null."
+            }
+          },
+          "required": [
+            "upiId",
+            "name",
+            "total",
+            "note"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "check_upi_id",
+        "title": "Check a UPI ID",
+        "description": "Check whether a UPI ID is well formed (for example shop@okaxis). This is a format check only; it does not contact any bank.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "upiId": {
+              "type": "string",
+              "description": "The UPI ID to check."
+            }
+          },
+          "required": [
+            "upiId"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
